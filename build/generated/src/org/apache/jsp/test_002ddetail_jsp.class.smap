@@ -1,0 +1,22 @@
+SMAP
+test_002ddetail_jsp.java
+JSP
+*S JSP
+*F
++ 0 test-detail.jsp
+test-detail.jsp
++ 1 header.html
+components/header.html
++ 2 sidebar.html
+components/sidebar.html
++ 3 footer.html
+components/footer.html
+*L
+1,68:51
+1#1,134:119
+68#0,2:253
+1#2,115:255
+69#0,58:370
+1#3,221:428
+126#0,279:648
+*E

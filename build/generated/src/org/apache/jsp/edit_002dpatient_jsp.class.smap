@@ -1,0 +1,22 @@
+SMAP
+edit_002dpatient_jsp.java
+JSP
+*S JSP
+*F
++ 0 edit-patient.jsp
+edit-patient.jsp
++ 1 header.html
+components/header.html
++ 2 sidebar.html
+components/sidebar.html
++ 3 footer.html
+components/footer.html
+*L
+1,43:51
+1#1,134:94
+43#0,2:228
+1#2,115:230
+44#0,144:345
+1#3,221:489
+187#0,348:709
+*E

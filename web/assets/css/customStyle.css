@@ -1,0 +1,224 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 13, 2020, 12:55:35 PM
+    Author     : Admin
+*/
+
+.titleName{
+    color: #f5fcf2;
+    padding-left: 20%;
+    font-family: cursive;
+    font-size: 24px;
+}
+
+i.fa.fa-map-marker{
+    color: tomato;
+}
+i.fa.fa-phone-square{
+    color: #078f2b;
+}
+i.fa.fa-envelope{
+    color: orange;
+}
+i.fa.fa-birthday-cake{
+    color: hotpink;
+}
+i.fa.fa-venus-mars{
+    color: #009efb;
+}
+
+span#phoneNum.text{
+    color: slateblue;
+}
+
+span#address.text, span#dob.text, span#gender.text{
+    color: #000000;
+}
+
+.custom-seach{
+    border-radius: 15px;
+    width: 35%;
+
+}
+
+/*===========Custom button=========*/
+.custom-btn{
+    background-color: #009efb;
+
+}
+
+.btn-primary{
+    background-color: #009efb;
+}
+
+.btn-success:hover{
+    border: 1px solid #009efb;
+    background: #1a7edb;
+}
+
+
+/*============Custom Sidebar============*/
+
+/*.sidebar{
+    background-color: #f5fcf2;
+}*/
+
+.sidebar-menu li a {
+    color: black;
+    font-weight: 500;
+}
+
+/*.sidebar-menu li.active a {
+    color: white;
+    background-color: #2a9c31;
+}*/
+
+/*============Doctor Page============*/
+
+h4.doctor-name.text-ellipsis,
+div.doc-prof{
+    font-size: 14px;
+}
+div.doc-prof{
+    /*    color: #2a9c31;*/
+    font-weight: bold;
+}
+div.profile-widget{
+    height: 200px;
+}
+/*div.pagination__controls{
+    padding-left: 1%;
+}*/
+
+div.pagination__controls{
+    width: 100%;
+    padding-left: 45%;
+    display: inline;
+}
+
+/*============Page Title============*/
+div.col-sm-4.col-3{
+
+
+}
+h4.page-title{
+    /*color: #2a9c31;*/
+    color: #505354;
+    font-weight: bolder;
+    font-family: cursive;
+}
+
+
+/*============Custom Search Bar Datatable============*/
+label{
+    color: #009efb;
+    font-weight: 600;
+}
+input.form-control.form-control-sm{
+    width: 250%;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+select.custom-select.custom-select-sm.form-control.form-control-sm{
+    border: 1px solid black;
+    width: 80%;
+}
+
+
+/*===========================Dropdown Menu===============================*/
+#d{
+    font-size: 15px;
+}
+a.dropdown-item:hover{
+    color: #009efb;
+
+}
+
+
+
+/*--============================Loading Page==============================*/
+.overlay{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 6%;
+    z-index: 999;
+    background:#f2f0f0
+        url("../img/loadingscreen2.gif") center no-repeat;
+}
+/* Turn off scrollbar when body element has the loading class */
+div.loading{
+    overflow: hidden;   
+}
+/* Make spinner image visible when body element has the loading class */
+div.loading.overlay{
+    display: block;
+
+}
+
+
+/* ===============================DoctorViewResult.JSP ================================ */
+div.doctorExam{
+    padding-left: 100px;
+}
+#doctorExam{
+    color: green;
+}
+span.doctorShow{
+    margin-left: 630px;
+    font-weight: bold;
+
+}
+div.patientShow{
+    margin-left: 160px;
+    font-weight: bold;
+}
+#patientExam{
+    color: tomato;
+}
+.packageCap{
+    font-family: monospace;
+    color: #009efb;
+}
+#clinicExam{
+    color: royalblue;
+}
+
+/* ===============================Image Preview ================================ */
+img#img{
+    width: 70px;
+    height: 70px;
+}
+
+
+/* ===============================PROFILE ================================ */
+.staff-id{
+    font-size: 18px;
+    margin-left: 5px;
+} 
+#usernameDisplay{
+    color: #009efb;
+}
+#emailDisplay{
+    color: #078f2b;
+}
+
+
+
+/*====================Table Reponsive=============================*/
+#patientTable{
+    width: 100% !important;
+}
+
+
+
+/*====================Profile Page=============================*/
+div.card-box.profile-header{
+    height: 210px;
+}

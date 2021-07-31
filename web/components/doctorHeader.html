@@ -1,0 +1,155 @@
+<body>
+
+    <div class="main-wrapper">
+        <div class="header">
+            <div class="header-left">
+                <a href="doctorIndex.jsp" class="logo">
+                    <img src="assets/img/logo.png" width="35" height="35" alt=""> <span>MPMR</span>
+                </a>
+            </div>
+            <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
+
+            <ul class="nav user-menu float-right">
+
+                <li class="nav-item dropdown d-none d-sm-block">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-bell-o"></i> <span id="number" class="badge badge-pill bg-danger float-right">0</span></a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span>Notifications</span>
+                        </div>
+                        <div id='show' class="drop-scroll">
+                            <ul class="notification-list">
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">
+                                                <img alt="John Doe" src="assets/img/user.jpg" class="img-fluid rounded-circle">
+                                            </span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">John Doe</span> added new task <span class="noti-title">Patient appointment booking</span></p>
+                                                <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            <a href="doctorCheckRequest.jsp">View all Notifications</a>
+                        </div>
+                    </div>
+                </li>
+                <!--                <li class="nav-item dropdown d-none d-sm-block">
+                                    <a href="javascript:void(0);" id="open_msg_box" class="hasnotifications nav-link"><i class="fa fa-comment-o"></i> <span class="badge badge-pill bg-danger float-right">8</span></a>
+                                </li>-->
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
+                        <span class="user-img"><img class="rounded-circle" src="assets/img/user.jpg" width="40" alt="">
+                            <span class="status online"></span></span>
+                        <span id="welcomeUser"></span>                      
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="profileDoctor.jsp">My Profile</a>
+
+                        <a class="dropdown-item Logout" id="Logout" href="login.html" >Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="dropdown mobile-user-menu float-right">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profileDoctor.jsp">My Profile</a>
+
+                    <a class="dropdown-item Logout" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+        <script src="assets/js/moment.min.js"></script>
+        <script>
+            var url = localStorage.getItem("image");
+            $('.rounded-circle').attr({
+                'src': url,
+            });
+            $(".Logout").click(function (event) {
+                localStorage.setItem("key", "");
+            });
+            var token = localStorage.getItem("key");
+            var id = localStorage.getItem("userId");
+            if (token === "") {
+                document.location.href = "login.html";
+            }
+            var user = localStorage.getItem("name");
+            var firstName = user.split(" ");
+            var name = firstName[firstName.length - 1];
+            $("#welcomeUser").text(name);
+            $(document).ready(realTime);
+            function realTime() {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+                        if (xmlhttp.status === 200) {
+                            var x = "";
+                            var today = new Date().getTime();
+
+
+                            function parseDMYhm(s) {
+                                var b = s.split(/\D/);
+                                return new Date(b[0], b[1] , b[2], b[3], b[4]).getTime();
+                            }
+                            var valueSort = xmlhttp.response.sort(function (a, b) {
+                                return parseDMYhm(b.timeStart) - parseDMYhm(a.timeStart);
+                            });
+                            for (var i = 0; i < valueSort.length; i++) {
+                                var split = valueSort[i].timeStart.split("Z");
+                                var time = new Date(split[0]).getTime();
+                                var change = (today - time) / 1000;
+                                if (change < 60) {
+                                    x += '<ul id="click" class="notification-list ' + valueSort[i].id + '"><li class="notification-message"><a href="#" ><div class="media"><span class="avatar"><img alt="John Doe" src="' + valueSort[i].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">'+ valueSort[i].userId.fullname + '</span> request <span class="noti-title">' + valueSort[i].type + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change) + ' second ago</span></p></div></div></a></li></ul>';
+                                } else if (change > 60 && change < 3600) {
+                                    x += '<ul id="click" class="notification-list ' + valueSort[i].id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + valueSort[i].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + valueSort[i].userId.fullname + '</span> request <span class="noti-title">' + valueSort[i].type + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 60) + ' minute ago</span></p></div></div></a></li></ul>';
+                                } else if (change > 3600 && change < 86400) {
+                                    x += '<ul id="click" class="notification-list ' + valueSort[i].id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + valueSort[i].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + valueSort[i].userId.fullname + '</span> request <span class="noti-title">' + valueSort[i].type + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 3600) + ' hour ago</span></p></div></div></a></li></ul>';
+
+                                } else if (change > 86400 && change < 604800) {
+                                    x += '<ul id="click" class="notification-list ' + valueSort[i].id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + valueSort[i].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + valueSort[i].userId.fullname + '</span> request <span class="noti-title">' + valueSort[i].type + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 86400) + ' day ago</span></p></div></div></a></li></ul>';
+
+                                } else if (change > 604800 && change < (604800 * 4)) {
+                                    x += '<ul id="click" class="notification-list ' + valueSort[i].id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + valueSort[i].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + valueSort[i].userId.fullname + '</span> request <span class="noti-title">' + valueSort[i].type + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 604800) + ' week ago</span></p></div></div></a></li></ul>';
+
+                                }
+                            }
+                            $("#number").html(xmlhttp.response.length);
+                            $("#show").html(x);
+                            setTimeout(realTime, 5000);
+                        }
+
+                    }
+                };
+
+                xmlhttp.open("GET", "https://bt-application.herokuapp.com/api/examination/findbydoctorid/" + id, true);
+                xmlhttp.setRequestHeader("Authorization", "Bearer " + token);
+                xmlhttp.responseType = 'json';
+                xmlhttp.send();
+            }
+            $(document).on('click', '[id^="click"]', function () {
+                var values = $(this)[0].className;
+                values = values.split("notification-list ");
+                console.log(values);
+                localStorage.setItem("idExamination", values[1]);
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=UTF-8",
+                    headers: {
+                        Authorization: 'Bearer ' + token},
+                    url: "https://bt-application.herokuapp.com/api/testrequest/findbyexaminationid/" + values[1],
+                    success: function (data) {
+                        localStorage.setItem("dataTestRequestId", JSON.stringify(data));
+                        window.location.href = "checkMorePackage.jsp";
+
+                    }, error: function (jqXHR, textStatus, errorThrown) {
+
+                    }})
+            });
+        </script>

@@ -1,0 +1,158 @@
+<body>
+
+    <div class="main-wrapper">
+        <div class="header">
+            <div class="header-left">
+                <a href="userIndex.jsp" class="logo">
+                    <img src="assets/img/logo.png" width="35" height="35" alt=""> <span>MPMR</span>
+                </a>
+            </div>
+            <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
+
+            <ul class="nav user-menu float-right">
+
+                <li class="nav-item dropdown d-none d-sm-block">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-bell-o"></i> <span id='number' class="badge badge-pill bg-danger float-right">0</span></a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span>Notifications</span>
+                        </div>
+                        <div id='show' class="drop-scroll">
+                            <ul class="notification-list">
+                                <li class="notification-message">
+                                    <a>
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <p class="noti-details"> No Notifications</p>
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            <a></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
+                        <span class="user-img"><img class="rounded-circle" src="assets/img/user.jpg" width="40" alt="">
+                            <span class="status online"></span></span>
+                        <span id="welcomeUser"></span>                      
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="profileUser.jsp">My Profile</a>
+                        <a class="dropdown-item Logout" href="login.html">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="dropdown mobile-user-menu float-right">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profileUser.html">My Profile</a>
+                    <a class="dropdown-item Logout" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            var url = localStorage.getItem("image");
+            $('.rounded-circle').attr({
+                'src': url,
+            });
+            $(".Logout").click(function (event) {
+                localStorage.setItem("key", "");
+            });
+            var token = localStorage.getItem("key");
+            if (token === "") {
+                document.location.href = "login.html";
+            }
+            var user = localStorage.getItem("name");
+            var userId = localStorage.getItem("userId");
+            var firstName = user.split(" ");
+            var name = firstName[firstName.length - 1];
+            $("#welcomeUser").text(name);
+            $(document).ready(realTime);
+            function realTime() {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onloadend = function () {
+                    if (xmlhttp.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+                        if (xmlhttp.status === 200) {
+                            var x = "";
+                            var today = new Date().getTime();
+                            function parseDMYhm(s) {
+                                var b = s.split(/\D/);
+                                return new Date(b[0], b[1], b[2], b[3], b[4]).getTime();
+                            }
+                            var valueSort = xmlhttp.response.sort(function (a, b) {
+                                return parseDMYhm(b.dateRequest) - parseDMYhm(a.dateRequest);
+                            });
+                            for (var i = 0; i < valueSort.length; i++) {
+                                var xml = new XMLHttpRequest();
+                                xml.open("GET", "https://bt-application.herokuapp.com/api/userfamilygroup/findgroupleader/" + valueSort[i].familyGroupId.id, true);
+                                xml.setRequestHeader("Authorization", "Bearer " + token);
+                                xml.responseType = 'json';
+                                xml.send();
+                                var count = 0;
+                                xml.onload = function () {
+                                    if (this.readyState === XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+                                        if (this.status === 200) {
+                                            count++;
+                                            for (var i = 0; i < valueSort.length; i++) {
+                                                if (this.response[0].familyGroupId.id === valueSort[i].familyGroupId.id) {
+                                                    var split = valueSort[i].dateRequest.split("Z");
+                                                    var time = new Date(split[0]).getTime();
+
+                                                    var change = (today - time) / 1000;
+                                                    if (change < 60) {
+                                                        x += '<ul id="noti" class="notification-list ' + valueSort[i].familyGroupId.id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + this.response[0].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + this.response[0].userId.fullname + '</span> request to join <span class="noti-title">' + valueSort[i].familyGroupId.name + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change) + ' second ago</span></p></div></div></a></li></ul>';
+
+                                                    } else if (change > 60 && change < 3600) {
+                                                        x += '<ul id="noti" class="notification-list ' + valueSort[i].familyGroupId.id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + this.response[0].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + this.response[0].userId.fullname + '</span> request to join <span class="noti-title">' + valueSort[i].familyGroupId.name + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 60) + ' minute ago</span></p></div></div></a></li></ul>';
+                                                    } else if (change > 3600 && change < 86400) {
+                                                        x += '<ul id="noti" class="notification-list ' + valueSort[i].familyGroupId.id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + this.response[0].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + this.response[0].userId.fullname + '</span> request to join <span class="noti-title">' + valueSort[i].familyGroupId.name + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 3600) + ' hour ago</span></p></div></div></a></li></ul>';
+
+                                                    } else if (change > 86400 && change < 604800) {
+                                                        x += '<ul id="noti" class="notification-list ' + valueSort[i].familyGroupId.id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + this.response[0].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + this.response[0].userId.fullname + '</span> request to join <span class="noti-title">' + valueSort[i].familyGroupId.name + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 86400) + ' day ago</span></p></div></div></a></li></ul>';
+
+                                                    } else if (change > 604800 && change < (604800 * 4)) {
+                                                        x += '<ul id="noti" class="notification-list ' + valueSort[i].familyGroupId.id + '"><li class="notification-message"><a href="#"><div class="media"><span class="avatar"><img alt="John Doe" src="' + this.response[0].userId.image + '" class="img-fluid rounded-circle"></span><div class="media-body"><p class="noti-details"><span class="noti-title">' + this.response[0].userId.fullname + '</span> request to join <span class="noti-title">' + valueSort[i].familyGroupId.name + '</span></p><p class="noti-time"><span class="notification-time">' + parseInt(change / 604800) + ' week ago</span></p></div></div></a></li></ul>';
+
+                                                    }
+
+                                                    localStorage.setItem("request", JSON.stringify(valueSort[i]));
+
+                                                    $(document).on('click', '[id^="noti"]', function () {
+                                                        var classNameId = this.className.split("notification-list ");
+                                                        classNameId = classNameId[1];
+                                                        localStorage.setItem("response", classNameId);
+                                                        window.location.href = "acceptRequestGroup.jsp";
+                                                    });
+                                                }
+                                            }
+                                            if (count === valueSort.length) {
+                                                $("#number").html(xmlhttp.response.length);
+                                                $("#show").html(x);
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+                ;
+                setTimeout(realTime,15000);
+                xmlhttp.open("GET", "https://bt-application.herokuapp.com/api/request/findbystatus/waiting/" + userId, true);
+                xmlhttp.setRequestHeader("Authorization", "Bearer " + token);
+                xmlhttp.responseType = 'json';
+                xmlhttp.send();
+            }
+        </script>

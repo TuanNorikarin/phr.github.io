@@ -1,0 +1,20 @@
+SMAP
+doctorIndex_jsp.java
+JSP
+*S JSP
+*F
++ 0 doctorIndex.jsp
+doctorIndex.jsp
++ 1 doctorHeader.html
+components/doctorHeader.html
++ 2 doctorSidebar.html
+components/doctorSidebar.html
+*L
+1,49:50
+1#1,155:99
+49#0,2:254
+1#2,120:256
+50#0,64:376
+114:440,2
+115,87:442
+*E
